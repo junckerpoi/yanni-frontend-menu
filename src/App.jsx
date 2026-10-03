@@ -1,14 +1,42 @@
 ﻿import React, { useEffect, useState } from 'react';
 
-const ADMIN_USER = {
+const DEFAULT_ADMIN_USER = {
   username: 'admin',
   password: 'yanni123',
   role: 'menu-admin',
 };
 
 const STORAGE_KEY = 'yanni-menu-data-v1';
+const ADMIN_CREDENTIALS_KEY = 'yanni-menu-admin-credentials-v1';
 const ADMIN_SESSION_KEY = 'yanni-menu-admin-session-v1';
 const API_BASE = import.meta.env.VITE_API_URL || '';
+
+const getStoredAdminCredentials = () => {
+  if (typeof window === 'undefined') {
+    return { ...DEFAULT_ADMIN_USER };
+  }
+
+  try {
+    const saved = window.localStorage.getItem(ADMIN_CREDENTIALS_KEY);
+    if (!saved) {
+      window.localStorage.setItem(ADMIN_CREDENTIALS_KEY, JSON.stringify(DEFAULT_ADMIN_USER));
+      return { ...DEFAULT_ADMIN_USER };
+    }
+
+    const parsed = JSON.parse(saved);
+    return {
+      ...DEFAULT_ADMIN_USER,
+      ...parsed,
+    };
+  } catch {
+    return { ...DEFAULT_ADMIN_USER };
+  }
+};
+
+const saveStoredAdminCredentials = (credentials) => {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(ADMIN_CREDENTIALS_KEY, JSON.stringify(credentials));
+};
 
 const defaultMenuData = [
   {
@@ -150,13 +178,13 @@ const fetchMenuFromServer = async () => {
   return loadSavedMenu();
 };
 
-const saveMenuToServer = async (menu) => {
+const saveMenuToServer = async (menu, adminUser = getStoredAdminCredentials()) => {
   const response = await fetch(`${API_BASE}/api/menu`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      username: ADMIN_USER.username,
-      password: ADMIN_USER.password,
+      username: adminUser.username,
+      password: adminUser.password,
       menu,
     }),
   });
@@ -187,17 +215,41 @@ const loginToServer = async (username, password) => {
 
 const isAdminLoggedIn = () => {
   if (typeof window === 'undefined') return false;
-  return window.localStorage.getItem(ADMIN_SESSION_KEY) === 'true';
+  return window.sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true';
+};
+
+const updateAdminCredentialsOnServer = async ({ username, password, currentUsername, currentPassword }) => {
+  const response = await fetch(`${API_BASE}/api/admin/credentials`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      username,
+      password,
+      currentUsername,
+      currentPassword,
+    }),
+  });
+
+  const payload = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(payload.message || 'Unable to update admin credentials.');
+  }
+
+  return payload;
 };
 
 const formatPrice = (item) => (item.vipPrice ? `${item.price} / VIP ${item.vipPrice}` : item.price);
 
 export default function App() {
+  const [adminCredentials, setAdminCredentials] = useState(getStoredAdminCredentials);
   const [menuCategories, setMenuCategories] = useState(loadSavedMenu);
   const [isLoggedIn, setIsLoggedIn] = useState(isAdminLoggedIn);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
+  const [credentialForm, setCredentialForm] = useState({ username: getStoredAdminCredentials().username, password: '' });
   const [loginError, setLoginError] = useState('');
+  const [credentialStatus, setCredentialStatus] = useState('');
   const [saveStatus, setSaveStatus] = useState('');
 
   useEffect(() => {
@@ -215,6 +267,14 @@ export default function App() {
     }
   }, [menuCategories]);
 
+  useEffect(() => {
+    saveStoredAdminCredentials(adminCredentials);
+    setCredentialForm({
+      username: adminCredentials.username,
+      password: '',
+    });
+  }, [adminCredentials]);
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -223,7 +283,7 @@ export default function App() {
       setIsLoggedIn(true);
       setLoginError('');
       if (typeof window !== 'undefined') {
-        window.localStorage.setItem(ADMIN_SESSION_KEY, 'true');
+        window.sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
       }
       setLoginForm({ username: '', password: '' });
     } catch (error) {
@@ -234,7 +294,38 @@ export default function App() {
   const handleLogout = () => {
     setIsLoggedIn(false);
     if (typeof window !== 'undefined') {
-      window.localStorage.removeItem(ADMIN_SESSION_KEY);
+      window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    }
+  };
+
+  const handleSaveCredentials = async () => {
+    const trimmedUsername = credentialForm.username.trim();
+    const trimmedPassword = credentialForm.password.trim();
+
+    if (!trimmedUsername || !trimmedPassword) {
+      setCredentialStatus('Username and password are required.');
+      return;
+    }
+
+    try {
+      await updateAdminCredentialsOnServer({
+        username: trimmedUsername,
+        password: trimmedPassword,
+        currentUsername: adminCredentials.username,
+        currentPassword: adminCredentials.password,
+      });
+
+      const updatedUser = {
+        username: trimmedUsername,
+        password: trimmedPassword,
+        role: 'menu-admin',
+      };
+
+      setAdminCredentials(updatedUser);
+      setCredentialStatus('Admin login updated successfully.');
+      setCredentialForm({ username: trimmedUsername, password: '' });
+    } catch (error) {
+      setCredentialStatus(error.message || 'Failed to update admin credentials.');
     }
   };
 
@@ -374,15 +465,46 @@ export default function App() {
           <div style={adminStyles.headerRow}>
             <div>
               <div style={adminStyles.title}>Menu Admin Control</div>
-              <div style={adminStyles.subtitle}>Role: {ADMIN_USER.role}</div>
+              <div style={adminStyles.subtitle}>Role: Admin</div>
             </div>
-            <div style={adminStyles.userChip}>Signed in as {ADMIN_USER.username}</div>
+            <div style={adminStyles.userChip}>Signed in</div>
           </div>
 
           <div style={adminStyles.actionBar}>
             <button onClick={handleSaveMenu} style={adminStyles.saveButton}>Save Menu</button>
             <button onClick={handleRefreshMenu} style={adminStyles.refreshButton}>Refresh</button>
             {saveStatus && <span style={adminStyles.saveStatus}>{saveStatus}</span>}
+          </div>
+
+          <div style={adminStyles.settingsBox}>
+            <div style={adminStyles.settingsTitle}>Admin account settings</div>
+            <div style={adminStyles.gridTwo}>
+              <label style={adminStyles.label}>
+                Username
+                <input
+                  style={adminStyles.input}
+                  value={credentialForm.username}
+                  onChange={(event) => setCredentialForm({ ...credentialForm, username: event.target.value })}
+                  placeholder="Staff username"
+                />
+              </label>
+
+              <label style={adminStyles.label}>
+                Password
+                <input
+                  type="password"
+                  style={adminStyles.input}
+                  value={credentialForm.password}
+                  onChange={(event) => setCredentialForm({ ...credentialForm, password: event.target.value })}
+                  placeholder="New password"
+                />
+              </label>
+            </div>
+
+            <div style={adminStyles.settingsActionRow}>
+              <button onClick={handleSaveCredentials} style={adminStyles.saveButton}>Update login</button>
+              {credentialStatus && <span style={adminStyles.saveStatus}>{credentialStatus}</span>}
+            </div>
           </div>
 
           {menuCategories.map((group, categoryIndex) => (
@@ -467,10 +589,6 @@ export default function App() {
             and an unforgettable Hawassa atmosphere from the first scan to the
             final sip.
           </p>
-          <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
-            <button style={styles.primaryBtn}>Scan to Order</button>
-            <button style={styles.ghostBtn}>View Menu</button>
-          </div>
         </div>
 
         <div style={styles.heroVisual}>
