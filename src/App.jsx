@@ -195,6 +195,7 @@ const formatPrice = (item) => (item.vipPrice ? `${item.price} / VIP ${item.vipPr
 export default function App() {
   const [menuCategories, setMenuCategories] = useState(loadSavedMenu);
   const [isLoggedIn, setIsLoggedIn] = useState(isAdminLoggedIn);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
   const [saveStatus, setSaveStatus] = useState('');
@@ -318,13 +319,55 @@ export default function App() {
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={styles.status}>Open today • 11:00–23:00</div>
-          {isLoggedIn ? (
-            <button onClick={handleLogout} style={styles.logoutButton}>Admin Logout</button>
+          {!isLoggedIn ? (
+            <button onClick={() => setShowAdminLogin(true)} style={styles.adminTriggerButton}>Admin</button>
           ) : (
-            <span style={styles.adminBadge}>Admin Mode</span>
+            <button onClick={handleLogout} style={styles.logoutButton}>Admin Logout</button>
           )}
         </div>
       </header>
+
+      {showAdminLogin && !isLoggedIn && (
+        <div style={styles.loginOverlay} onClick={() => setShowAdminLogin(false)}>
+          <div style={styles.loginDialog} onClick={(event) => event.stopPropagation()}>
+            <div style={styles.loginDialogHeader}>
+              <h3 style={{ margin: 0 }}>Staff Access</h3>
+              <button onClick={() => setShowAdminLogin(false)} style={styles.closeButton}>×</button>
+            </div>
+            <form onSubmit={handleLogin} style={styles.loginCardInline}>
+              <p style={styles.loginText}>Use the admin credentials to manage menu items and pricing.</p>
+
+              <label style={styles.fieldLabel}>
+                Username
+                <input
+                  style={styles.input}
+                  value={loginForm.username}
+                  onChange={(event) => setLoginForm({ ...loginForm, username: event.target.value })}
+                  placeholder="admin"
+                />
+              </label>
+
+              <label style={styles.fieldLabel}>
+                Password
+                <input
+                  type="password"
+                  style={styles.input}
+                  value={loginForm.password}
+                  onChange={(event) => setLoginForm({ ...loginForm, password: event.target.value })}
+                  placeholder="••••••••"
+                />
+              </label>
+
+              {loginError && <div style={styles.errorText}>{loginError}</div>}
+
+              <div style={styles.loginActions}>
+                <button type="button" onClick={() => setShowAdminLogin(false)} style={styles.cancelButton}>Cancel</button>
+                <button type="submit" style={styles.primaryBtn}>Access Admin Panel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {isLoggedIn && (
         <section style={adminStyles.panel}>
@@ -697,6 +740,49 @@ const styles = {
     cursor: 'pointer',
     fontWeight: 700,
   },
+  adminTriggerButton: {
+    background: 'rgba(215,167,92,0.12)',
+    color: '#d7a75c',
+    border: '1px solid rgba(215,167,92,0.25)',
+    borderRadius: '999px',
+    padding: '8px 12px',
+    cursor: 'pointer',
+    fontWeight: 700,
+    fontSize: '0.8rem',
+  },
+  loginOverlay: {
+    position: 'fixed',
+    inset: 0,
+    background: 'rgba(6, 9, 12, 0.72)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 50,
+    padding: '20px',
+  },
+  loginDialog: {
+    width: '100%',
+    maxWidth: '440px',
+    background: '#171312',
+    border: '1px solid rgba(215,167,92,0.22)',
+    borderRadius: '22px',
+    padding: '20px',
+    boxShadow: '0 24px 50px rgba(0,0,0,0.38)',
+  },
+  loginDialogHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: '20px',
+  },
+  closeButton: {
+    background: 'transparent',
+    color: '#fff',
+    border: 'none',
+    fontSize: '1.8rem',
+    cursor: 'pointer',
+    lineHeight: 1,
+  },
   loginWrap: {
     display: 'flex',
     justifyContent: 'center',
@@ -711,6 +797,12 @@ const styles = {
     maxWidth: '420px',
     boxShadow: '0 18px 40px rgba(0,0,0,0.25)',
   },
+  loginCardInline: {
+    background: 'rgba(255,255,255,0.02)',
+    border: '1px solid rgba(255,255,255,0.06)',
+    borderRadius: '16px',
+    padding: '18px',
+  },
   loginTitle: { margin: '0 0 10px', fontSize: '1.7rem' },
   loginText: { margin: '0 0 18px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5 },
   fieldLabel: { display: 'flex', flexDirection: 'column', gap: '7px', marginBottom: '16px', color: '#f7f0e7', fontSize: '0.82rem' },
@@ -721,6 +813,22 @@ const styles = {
     color: '#fff',
     padding: '10px 12px',
     fontSize: '0.95rem',
+  },
+  loginActions: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: '12px',
+    marginTop: '10px',
+    flexWrap: 'wrap',
+  },
+  cancelButton: {
+    background: 'transparent',
+    color: '#f7f0e7',
+    border: '1px solid rgba(255,255,255,0.16)',
+    borderRadius: '10px',
+    padding: '10px 14px',
+    fontWeight: 700,
+    cursor: 'pointer',
   },
   errorText: {
     color: '#ffb3b3',
