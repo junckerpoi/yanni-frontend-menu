@@ -310,7 +310,7 @@ export default function App() {
     <div style={styles.shell}>
       <header style={styles.topbar}>
         <div style={styles.brand}>
-          <div style={styles.brandMark}>Y</div>
+          <img src="/yannis-logo.svg" alt="Yanni's Yared logo" style={styles.brandLogo} />
           <div>
             <strong style={styles.brandTitle}>YANNI'S YARED</strong>
             <span style={styles.brandSub}>LUXURY HAWASSA DINING</span>
@@ -455,40 +455,6 @@ export default function App() {
         </section>
       )}
 
-      {!isLoggedIn && (
-        <section style={styles.loginWrap}>
-          <form onSubmit={handleLogin} style={styles.loginCard}>
-            <h2 style={styles.loginTitle}>Admin login</h2>
-            <p style={styles.loginText}>Manage menu items, prices, and ingredient notes.</p>
-
-            <label style={styles.fieldLabel}>
-              Username
-              <input
-                style={styles.input}
-                value={loginForm.username}
-                onChange={(event) => setLoginForm({ ...loginForm, username: event.target.value })}
-                placeholder="admin"
-              />
-            </label>
-
-            <label style={styles.fieldLabel}>
-              Password
-              <input
-                type="password"
-                style={styles.input}
-                value={loginForm.password}
-                onChange={(event) => setLoginForm({ ...loginForm, password: event.target.value })}
-                placeholder="••••••••"
-              />
-            </label>
-
-            {loginError && <div style={styles.errorText}>{loginError}</div>}
-
-            <button type="submit" style={styles.primaryBtn}>Access Admin Panel</button>
-          </form>
-        </section>
-      )}
-
       <section style={styles.hero}>
         <div>
           <span style={styles.eyebrow}>LUXURY DINING EXPERIENCE</span>
@@ -507,11 +473,11 @@ export default function App() {
           </div>
         </div>
 
-        <div style={styles.phoneCard}>
-          <div style={styles.screen}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={styles.heroVisual}>
+          <div style={styles.heroVisualCard}>
+            <div style={styles.heroVisualHeader}>
               <span style={{ fontSize: '0.75rem', color: '#d7a75c' }}>● Menu</span>
-              <span style={styles.miniPill}>QR</span>
+              <span style={styles.miniPill}>Premium</span>
             </div>
             <div style={{ textAlign: 'center', margin: '20px 0' }}>
               <h3 style={{ margin: 0, fontSize: '1.4rem' }}>Yanni's Yared</h3>
@@ -519,17 +485,8 @@ export default function App() {
                 Lakeside dining • Hawassa
               </p>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fyannis-yared.com"
-                alt="QR Menu"
-                style={{ borderRadius: '12px', padding: '8px', background: '#fff' }}
-              />
-            </div>
-            <div style={{ textAlign: 'center', marginTop: '14px' }}>
-              <strong style={{ fontSize: '0.8rem', letterSpacing: '1px' }}>
-                SCAN TO EXPLORE
-              </strong>
+            <div style={styles.heroVisualPlate}>
+              <div style={styles.heroVisualDish} />
             </div>
           </div>
         </div>
@@ -704,15 +661,12 @@ const styles = {
     gap: '12px',
   },
   brand: { display: 'flex', alignItems: 'center', gap: '12px' },
-  brandMark: {
-    width: '42px',
-    height: '42px',
-    borderRadius: '12px',
-    background: 'linear-gradient(135deg, #d7a75c, #8c5a24)',
-    display: 'grid',
-    placeItems: 'center',
-    fontWeight: 'bold',
-    color: '#fff',
+  brandLogo: {
+    width: '74px',
+    height: '74px',
+    objectFit: 'contain',
+    display: 'block',
+    filter: 'drop-shadow(0 8px 16px rgba(215,167,92,0.28))',
   },
   brandTitle: { display: 'block', fontSize: '0.9rem', letterSpacing: '2px' },
   brandSub: { display: 'block', fontSize: '0.65rem', color: 'rgba(255,255,255,0.5)' },
@@ -870,17 +824,40 @@ const styles = {
     fontWeight: 'bold',
     cursor: 'pointer',
   },
-  phoneCard: {
+  heroVisual: {
     background: 'rgba(255,255,255,0.03)',
     border: '1px solid rgba(255,255,255,0.08)',
     borderRadius: '24px',
     padding: '20px',
   },
-  screen: {
+  heroVisualCard: {
     background: '#1a1410',
     borderRadius: '16px',
     padding: '20px',
     border: '1px solid rgba(255,255,255,0.05)',
+    minHeight: '280px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
+  heroVisualHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  heroVisualPlate: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '140px',
+  },
+  heroVisualDish: {
+    width: '110px',
+    height: '110px',
+    borderRadius: '50%',
+    background: 'radial-gradient(circle at 35% 30%, #f4d9a0 0%, #d7a75c 28%, #8b5e2a 60%, #3f2613 100%)',
+    boxShadow: '0 18px 30px rgba(215,167,92,0.35)',
+    border: '8px solid rgba(255,255,255,0.14)',
   },
   miniPill: {
     background: 'rgba(255,255,255,0.08)',

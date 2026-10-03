@@ -170,20 +170,16 @@ export default function MenuQRPage() {
         >
           <Stack direction="row" spacing={2} alignItems="center">
             <Box
+              component="img"
+              src="/yannis-logo.svg"
+              alt="Yanni's Yared logo"
               sx={{
-                width: 52,
-                height: 52,
-                borderRadius: '16px',
-                background: 'linear-gradient(135deg, #d7a75c 0%, #a96d2d 100%)',
-                display: 'grid',
-                placeItems: 'center',
-                fontWeight: 800,
-                color: '#fff',
-                boxShadow: '0 10px 30px rgba(215,167,92,0.35)',
+                width: 72,
+                height: 72,
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 10px 24px rgba(215,167,92,0.28))',
               }}
-            >
-              Y
-            </Box>
+            />
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase' }}>
                 Yanni's Yared
