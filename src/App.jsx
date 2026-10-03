@@ -152,12 +152,22 @@ const defaultMenuData = [
   },
 ];
 
+const isValidMenuData = (menu) => Array.isArray(menu) && menu.length >= 4 && menu.every((group) => Array.isArray(group?.items));
+
 const loadSavedMenu = () => {
   if (typeof window === 'undefined') return defaultMenuData;
 
   try {
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : defaultMenuData;
+    if (!saved) return defaultMenuData;
+
+    const parsed = JSON.parse(saved);
+    if (isValidMenuData(parsed)) {
+      return parsed;
+    }
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultMenuData));
+    return defaultMenuData;
   } catch {
     return defaultMenuData;
   }
@@ -168,7 +178,7 @@ const fetchMenuFromServer = async () => {
     const response = await fetch(`${API_BASE}/api/menu`);
     if (!response.ok) throw new Error('Menu request failed');
     const data = await response.json();
-    if (Array.isArray(data) && data.length > 0) {
+    if (isValidMenuData(data)) {
       return data;
     }
   } catch {
@@ -362,6 +372,14 @@ export default function App() {
     setSaveStatus('Menu refreshed');
   };
 
+  const handleResetMenuCache = () => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.removeItem(STORAGE_KEY);
+    const resetMenu = defaultMenuData;
+    setMenuCategories(resetMenu);
+    setSaveStatus('Menu cache cleared');
+  };
+
   const addItem = (categoryIndex) => {
     setMenuCategories((current) =>
       current.map((group, gIndex) => {
@@ -473,6 +491,7 @@ export default function App() {
           <div style={adminStyles.actionBar}>
             <button onClick={handleSaveMenu} style={adminStyles.saveButton}>Save Menu</button>
             <button onClick={handleRefreshMenu} style={adminStyles.refreshButton}>Refresh</button>
+            <button onClick={handleResetMenuCache} style={adminStyles.resetButton}>Reset menu cache</button>
             {saveStatus && <span style={adminStyles.saveStatus}>{saveStatus}</span>}
           </div>
 
@@ -694,6 +713,15 @@ const adminStyles = {
     background: 'transparent',
     color: '#f7f0e7',
     border: '1px solid rgba(255,255,255,0.18)',
+    borderRadius: '12px',
+    padding: '10px 16px',
+    fontWeight: '700',
+    cursor: 'pointer',
+  },
+  resetButton: {
+    background: 'rgba(185,61,61,0.12)',
+    color: '#ffb4b4',
+    border: '1px solid rgba(185,61,61,0.35)',
     borderRadius: '12px',
     padding: '10px 16px',
     fontWeight: '700',
