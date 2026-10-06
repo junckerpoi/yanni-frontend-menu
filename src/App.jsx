@@ -38,6 +38,23 @@ const saveStoredAdminCredentials = (credentials) => {
   window.localStorage.setItem(ADMIN_CREDENTIALS_KEY, JSON.stringify(credentials));
 };
 
+const createMenuItemId = () => {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+
+  return `menu-item-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+};
+
+const normalizeMenuData = (menu) =>
+  menu.map((group) => ({
+    ...group,
+    items: group.items.map((item) => ({
+      ...item,
+      id: item.id || createMenuItemId(),
+    })),
+  }));
+
 const defaultMenuData = [
   {
     title: 'Cultural Foods',
@@ -163,13 +180,13 @@ const loadSavedMenu = () => {
 
     const parsed = JSON.parse(saved);
     if (isValidMenuData(parsed)) {
-      return parsed;
+      return normalizeMenuData(parsed);
     }
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultMenuData));
-    return defaultMenuData;
+    return normalizeMenuData(defaultMenuData);
   } catch {
-    return defaultMenuData;
+    return normalizeMenuData(defaultMenuData);
   }
 };
 
@@ -179,7 +196,7 @@ const fetchMenuFromServer = async () => {
     if (!response.ok) throw new Error('Menu request failed');
     const data = await response.json();
     if (isValidMenuData(data)) {
-      return data;
+      return normalizeMenuData(data);
     }
   } catch {
     return loadSavedMenu();
@@ -390,6 +407,7 @@ export default function App() {
           items: [
             ...group.items,
             {
+              id: createMenuItemId(),
               name: 'New Item',
               price: '0 ETB',
               vipPrice: '',
@@ -536,7 +554,7 @@ export default function App() {
               </div>
 
               {group.items.map((item, itemIndex) => (
-                <div key={`${item.name}-${itemIndex}`} style={adminStyles.itemEditor}>
+                <div key={item.id || `${categoryIndex}-${itemIndex}`} style={adminStyles.itemEditor}>
                   <div style={adminStyles.gridTwo}>
                     <label style={adminStyles.label}>
                       Name
