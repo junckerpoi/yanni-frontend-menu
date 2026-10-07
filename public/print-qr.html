@@ -260,6 +260,7 @@
       </section>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
     <script>
       (function () {
         var menuUrl = 'https://yanniyardmenu.netlify.app/';
@@ -361,8 +362,20 @@
           }
         }
 
-        if (qrImage) {
-          qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=' + encodeURIComponent(menuUrl);
+        if (qrImage && window.QRCode && typeof window.QRCode.toDataURL === 'function') {
+          window.QRCode.toDataURL(menuUrl, {
+            errorCorrectionLevel: 'H',
+            width: 320,
+            margin: 2,
+            color: {
+              dark: '#111111',
+              light: '#FFFFFF',
+            },
+          }).then(function (dataUrl) {
+            qrImage.src = dataUrl;
+          }).catch(function () {
+            qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=' + encodeURIComponent(menuUrl);
+          });
         }
 
         if (downloadButton) {
