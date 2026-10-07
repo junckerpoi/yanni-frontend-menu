@@ -110,35 +110,12 @@
         margin: 28px 0 18px;
       }
 
-      .qr-shell {
-        position: relative;
+      .qr-code {
         width: min(360px, 100%);
-      }
-
-      .qr-shell img.qr-code {
-        width: 100%;
         aspect-ratio: 1;
         display: block;
         border-radius: 24px;
-        background: #fff;
-        padding: 16px;
         box-shadow: 0 18px 36px rgba(0, 0, 0, 0.3);
-      }
-
-      .qr-logo {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 84px;
-        height: 84px;
-        transform: translate(-50%, -50%);
-        border-radius: 22px;
-        background: rgba(255, 255, 255, 0.98);
-        border: 4px solid rgba(255, 255, 255, 0.98);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-        padding: 8px;
-        object-fit: contain;
-        pointer-events: none;
       }
 
       .url {
@@ -156,6 +133,8 @@
         justify-content: center;
         flex-wrap: wrap;
         margin-top: 22px;
+        position: relative;
+        z-index: 1;
       }
 
       .button {
@@ -167,6 +146,10 @@
         text-transform: uppercase;
         font-weight: 700;
         cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .primary {
@@ -242,146 +225,19 @@
         <div class="subtitle">Place this card on tables, counters, or receipts so guests can open the menu instantly.</div>
 
         <div class="qr-wrap">
-          <div class="qr-shell">
-            <img id="menu-qr" class="qr-code" alt="QR code for the Yanni's Yared menu" />
-            <img class="qr-logo" src="/yannis-logo.svg" alt="Yanni's Yared logo" />
-          </div>
+          <img class="qr-code" src="qr-card.svg" alt="QR code for the Yanni's Yared menu" />
         </div>
 
         <div class="url">https://yanniyardmenu.netlify.app/</div>
 
         <div class="actions">
-          <button class="button primary" type="button" id="download-btn">Download PNG</button>
+          <a class="button primary" href="qr-card.svg" download="yannis-yared-qr-card.svg">Download QR</a>
           <button class="button secondary" type="button" onclick="window.print()">Print card</button>
-          <button class="button secondary" type="button" onclick="window.open('https://yanniyardmenu.netlify.app/', '_blank')">Open menu</button>
+          <a class="button secondary" href="https://yanniyardmenu.netlify.app/" target="_blank" rel="noreferrer">Open menu</a>
         </div>
 
         <div class="footer">Best printed on white card or matte paper</div>
       </section>
     </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
-    <script>
-      (function () {
-        var menuUrl = 'https://yanniyardmenu.netlify.app/';
-        var qrImage = document.getElementById('menu-qr');
-        var downloadButton = document.getElementById('download-btn');
-        var logoImage = new Image();
-        logoImage.src = '/yannis-logo.svg';
-
-        function waitForImage(image) {
-          return new Promise(function (resolve, reject) {
-            if (image.complete && image.naturalWidth) {
-              resolve(image);
-              return;
-            }
-
-            image.onload = function () { resolve(image); };
-            image.onerror = function () { reject(new Error('Image failed to load')); };
-          });
-        }
-
-        function drawRoundedRect(context, x, y, width, height, radius) {
-          context.beginPath();
-          context.moveTo(x + radius, y);
-          context.arcTo(x + width, y, x + width, y + height, radius);
-          context.arcTo(x + width, y + height, x, y + height, radius);
-          context.arcTo(x, y + height, x, y, radius);
-          context.arcTo(x, y, x + width, y, radius);
-          context.closePath();
-        }
-
-        async function downloadPoster() {
-          try {
-            var qr = await waitForImage(qrImage);
-            var logo = await waitForImage(logoImage);
-            var canvas = document.createElement('canvas');
-            canvas.width = 1200;
-            canvas.height = 1600;
-            var context = canvas.getContext('2d');
-
-            context.fillStyle = '#120e0b';
-            context.fillRect(0, 0, canvas.width, canvas.height);
-
-            var margin = 72;
-            var cardX = margin;
-            var cardY = margin;
-            var cardWidth = canvas.width - margin * 2;
-            var cardHeight = canvas.height - margin * 2;
-
-            drawRoundedRect(context, cardX, cardY, cardWidth, cardHeight, 36);
-            context.fillStyle = '#1b1410';
-            context.fill();
-
-            drawRoundedRect(context, cardX + 36, cardY + 36, cardWidth - 72, 140, 28);
-            context.fillStyle = '#2b2019';
-            context.fill();
-
-            context.fillStyle = '#f7f0e7';
-            context.font = 'bold 42px Segoe UI, Arial, sans-serif';
-            context.fillText("Yanni's Yared", cardX + 74, cardY + 92);
-            context.font = '24px Segoe UI, Arial, sans-serif';
-            context.fillStyle = 'rgba(247,240,231,0.75)';
-            context.fillText('Luxury hawassa dining', cardX + 74, cardY + 130);
-
-            drawRoundedRect(context, cardX + 92, cardY + 250, cardWidth - 184, cardWidth - 184, 40);
-            context.fillStyle = '#fff';
-            context.fill();
-
-            var qrSize = cardWidth - 184;
-            context.drawImage(qr, cardX + 92, cardY + 250, qrSize, qrSize);
-
-            var logoSize = 170;
-            var logoX = cardX + cardWidth / 2 - logoSize / 2;
-            var logoY = cardY + 250 + qrSize / 2 - logoSize / 2;
-            drawRoundedRect(context, logoX, logoY, logoSize, logoSize, 34);
-            context.fillStyle = 'rgba(255,255,255,0.98)';
-            context.fill();
-            context.drawImage(logo, logoX + 16, logoY + 16, logoSize - 32, logoSize - 32);
-
-            context.fillStyle = 'rgba(247,240,231,0.76)';
-            context.font = '24px Segoe UI, Arial, sans-serif';
-            context.textAlign = 'center';
-            context.fillText('https://yanniyardmenu.netlify.app/', canvas.width / 2, cardY + 990);
-
-            context.textAlign = 'center';
-            context.font = 'bold 34px Segoe UI, Arial, sans-serif';
-            context.fillStyle = '#d7a75c';
-            context.fillText('Scan for the digital menu', canvas.width / 2, cardY + 1088);
-
-            context.font = '22px Segoe UI, Arial, sans-serif';
-            context.fillStyle = 'rgba(247,240,231,0.72)';
-            context.fillText('Best printed on white card or matte paper', canvas.width / 2, cardY + 1140);
-
-            var link = document.createElement('a');
-            link.download = 'yannis-yared-qr-card.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
-          } catch (error) {
-            alert('Unable to create the PNG right now. You can still use Print card and save as PDF.');
-          }
-        }
-
-        if (qrImage && window.QRCode && typeof window.QRCode.toDataURL === 'function') {
-          window.QRCode.toDataURL(menuUrl, {
-            errorCorrectionLevel: 'H',
-            width: 320,
-            margin: 2,
-            color: {
-              dark: '#111111',
-              light: '#FFFFFF',
-            },
-          }).then(function (dataUrl) {
-            qrImage.src = dataUrl;
-          }).catch(function () {
-            qrImage.src = 'https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=' + encodeURIComponent(menuUrl);
-          });
-        }
-
-        if (downloadButton) {
-          downloadButton.addEventListener('click', downloadPoster);
-        }
-      }());
-    </script>
   </body>
 </html>

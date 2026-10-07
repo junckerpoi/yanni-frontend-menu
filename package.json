@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "npm run generate:qr-card",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:qr-card": "node scripts/generate-qr-card.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -16,6 +18,7 @@
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "axios": "^1.7.7",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.2",
