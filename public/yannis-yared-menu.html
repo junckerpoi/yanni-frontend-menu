@@ -408,7 +408,7 @@
               </div>
 
               <div class="qr-box">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https%3A%2F%2Fyour-restaurant-menu.example.com" alt="QR code" />
+                <img id="menu-qr" src="" alt="QR code" />
               </div>
 
               <div class="scan-text">
@@ -593,5 +593,15 @@
         </section>
       </main>
     </div>
+    <script>
+      (function () {
+        var menuUrl = window.location.origin + '/yannis-yared-menu.html';
+        var qrImg = document.getElementById('menu-qr');
+
+        if (qrImg) {
+          qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(menuUrl);
+        }
+      }());
+    </script>
   </body>
 </html>

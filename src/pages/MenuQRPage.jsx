@@ -143,7 +143,9 @@ const menuSections = [
   },
 ];
 
-const menuUrl = 'https://your-restaurant-menu.example.com';
+const menuUrl = typeof window === 'undefined'
+  ? 'https://your-restaurant-menu.example.com/yannis-yared-menu.html'
+  : `${window.location.origin}/yannis-yared-menu.html`;
 const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(menuUrl)}`;
 
 export default function MenuQRPage() {
