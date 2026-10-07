@@ -279,6 +279,18 @@
         color: var(--muted);
       }
 
+      .print-note {
+        margin-top: 22px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(255,255,255,0.03);
+        text-align: center;
+        line-height: 1.7;
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
       .menu-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(230px, 1fr));
@@ -407,13 +419,8 @@
                 <div class="tagline">Lakeside dining • Hawassa</div>
               </div>
 
-              <div class="qr-box">
-                <img id="menu-qr" src="" alt="QR code" />
-              </div>
-
-              <div class="scan-text">
-                <strong>Scan to explore</strong>
-                <span>Online menu • table 7</span>
+              <div class="print-note">
+                Ask for the printed QR card to open the digital menu at the table.
               </div>
             </div>
           </div>
@@ -593,15 +600,5 @@
         </section>
       </main>
     </div>
-    <script>
-      (function () {
-        var menuUrl = window.location.origin + '/yannis-yared-menu.html';
-        var qrImg = document.getElementById('menu-qr');
-
-        if (qrImg) {
-          qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(menuUrl);
-        }
-      }());
-    </script>
   </body>
 </html>
