@@ -306,9 +306,16 @@ export default function App() {
     event.preventDefault();
 
     try {
-      await loginToServer(loginForm.username, loginForm.password);
+      const usedCredentials = {
+        username: loginForm.username.trim(),
+        password: loginForm.password,
+      };
+      await loginToServer(usedCredentials.username, usedCredentials.password);
       setIsLoggedIn(true);
       setLoginError('');
+      // Keep the local copy in sync with the credentials the server just
+      // accepted, otherwise menu saves and credential updates send stale ones.
+      setAdminCredentials({ ...usedCredentials, role: 'menu-admin' });
       if (typeof window !== 'undefined') {
         window.sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
       }
@@ -329,8 +336,8 @@ export default function App() {
     const trimmedUsername = credentialForm.username.trim();
     const trimmedPassword = credentialForm.password.trim();
 
-    if (!trimmedUsername || !trimmedPassword) {
-      setCredentialStatus('Username and password are required.');
+    if (!trimmedUsername) {
+      setCredentialStatus('Username is required.');
       return;
     }
 
@@ -344,7 +351,7 @@ export default function App() {
 
       const updatedUser = {
         username: trimmedUsername,
-        password: trimmedPassword,
+        password: trimmedPassword || adminCredentials.password,
         role: 'menu-admin',
       };
 
@@ -437,9 +444,9 @@ export default function App() {
     <div style={styles.shell}>
       <header style={styles.topbar}>
         <div style={styles.brand}>
-          <img src="/yannis-logo.svg" alt="Yanni's Yared logo" style={styles.brandLogo} />
+          <img src="/yannis-logo.svg" alt="Yanni's Yard logo" style={styles.brandLogo} />
           <div>
-            <strong style={styles.brandTitle}>YANNI'S YARED</strong>
+            <strong style={styles.brandTitle}>YANNI'S YARD</strong>
             <span style={styles.brandSub}>LUXURY HAWASSA DINING</span>
           </div>
         </div>
@@ -635,7 +642,7 @@ export default function App() {
               <span style={styles.miniPill}>Premium</span>
             </div>
             <div style={{ textAlign: 'center', margin: '20px 0' }}>
-              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>Yanni's Yared</h3>
+              <h3 style={{ margin: 0, fontSize: '1.4rem' }}>Yanni's Yard</h3>
               <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
                 Lakeside dining • Hawassa
               </p>

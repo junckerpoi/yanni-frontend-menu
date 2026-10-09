@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Yanni's Yared | Luxury Hawassa QR Menu</title>
+    <title>Yanni's Yard | Luxury Hawassa QR Menu</title>
     <style>
       :root {
         --bg-1: #17110d;
@@ -373,6 +373,12 @@
         .hero, .menu-grid { padding-left: 18px; padding-right: 18px; }
         .menu-grid { grid-template-columns: 1fr; }
       }
+      .menu-item .item-desc {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.55;
+      }
     </style>
   </head>
   <body>
@@ -381,7 +387,7 @@
         <div class="brand">
           <div class="brand-mark">Y</div>
           <div class="brand-copy">
-            <strong>Yanni's Yared</strong>
+            <strong>Yanni's Yard</strong>
             <span>Luxury hawassa dining</span>
           </div>
         </div>
@@ -415,7 +421,7 @@
               </div>
 
               <div class="restaurant-panel">
-                <h2>Yanni's Yared</h2>
+                <h2>Yanni's Yard</h2>
                 <div class="tagline">Lakeside dining • Hawassa</div>
               </div>
 
@@ -426,179 +432,84 @@
           </div>
         </section>
 
-        <section class="menu-grid">
+        <section class="menu-grid" id="menu-grid" aria-live="polite">
           <div class="section-card">
             <div class="section-head">
-              <h3>Cultural Foods</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Cultural foods</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Cultural foods</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Cultural foods</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Cultural Foods for Vegans</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Vegan</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Vegan</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Vegan</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Junk Food</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Junk food</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Junk food</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Junk food</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Junk Foods for Vegans</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Vegan junk</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Vegan junk</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Vegan junk</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Alcohol Drinks</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Alcohol</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Alcohol</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Alcohol</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Beers</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Beer</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Beer</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Beer</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Wine</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Wine</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Wine</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Wine</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Soft Drinks</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Soft</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Soft</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Soft</div>
-            </div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-head">
-              <h3>Hot Drinks</h3>
-              <div class="count">3 items</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Hot</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Hot</div>
-            </div>
-            <div class="menu-item">
-              <div class="menu-label"><strong>Add item from the list</strong><span>ETB 0</span></div>
-              <div class="meta">Hot</div>
+              <h3>Loading menu…</h3>
             </div>
           </div>
         </section>
       </main>
     </div>
+
+    <script>
+      (function () {
+        var grid = document.getElementById('menu-grid');
+
+        var formatPrice = function (item) {
+          return item.vipPrice ? item.price + ' / VIP ' + item.vipPrice : item.price;
+        };
+
+        var escapeHtml = function (value) {
+          var div = document.createElement('div');
+          div.textContent = value == null ? '' : String(value);
+          return div.innerHTML;
+        };
+
+        // Try same-origin /api first (local dev/preview use the Vite proxy).
+        // Static hosts like Netlify have no /api proxy, so fall back to the
+        // Render API. Update API_FALLBACK if the backend URL ever changes.
+        var API_FALLBACK = 'https://yanni-menu-backend.onrender.com';
+
+        var loadMenu = function (base) {
+          return fetch(base + '/api/menu').then(function (response) {
+            if (!response.ok) throw new Error('Menu request failed');
+            return response.json();
+          });
+        };
+
+        loadMenu('')
+          .catch(function () {
+            return loadMenu(API_FALLBACK);
+          })
+          .then(function (menu) {
+            if (!Array.isArray(menu) || menu.length === 0) throw new Error('Menu is empty');
+
+            grid.innerHTML = '';
+
+            menu.forEach(function (group) {
+              var card = document.createElement('div');
+              card.className = 'section-card';
+
+              var head = document.createElement('div');
+              head.className = 'section-head';
+              head.innerHTML =
+                '<h3>' + escapeHtml(group.title) + '</h3>' +
+                '<div class="count">' + group.items.length + ' items</div>';
+              card.appendChild(head);
+
+              group.items.forEach(function (item) {
+                var row = document.createElement('div');
+                row.className = 'menu-item';
+                row.innerHTML =
+                  '<div class="menu-label"><strong>' + escapeHtml(item.name) + '</strong><span>' +
+                  escapeHtml(formatPrice(item)) + '</span></div>' +
+                  (item.description
+                    ? '<div class="item-desc">' + escapeHtml(item.description) + '</div>'
+                    : '') +
+                  '<div class="meta">' + escapeHtml(item.cat || group.title) + '</div>';
+                card.appendChild(row);
+              });
+
+              grid.appendChild(card);
+            });
+          })
+          .catch(function () {
+            grid.innerHTML =
+              '<div class="section-card"><div class="section-head"><h3>Menu unavailable</h3></div>' +
+              '<div class="menu-item"><div class="menu-label"><strong>We could not load the menu. Please refresh and try again.</strong></div></div></div>';
+          });
+      })();
+    </script>
   </body>
 </html>

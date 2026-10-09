@@ -28,7 +28,7 @@ const qrMarkup = qrSvg
   .replace(/height="[^"]+"/, 'height="900"');
 
 const outputSvg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-label="Yanni's Yared QR code">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200" role="img" aria-label="Yanni's Yard QR code">
   <rect width="1200" height="1200" rx="72" fill="#ffffff"/>
   <rect x="100" y="100" width="1000" height="1000" rx="60" fill="#ffffff"/>
   <g transform="translate(150 150)">

@@ -174,7 +174,7 @@ export default function MenuQRPage() {
             <Box
               component="img"
               src="/yannis-logo.svg"
-              alt="Yanni's Yared logo"
+              alt="Yanni's Yard logo"
               sx={{
                 width: 72,
                 height: 72,
@@ -184,7 +184,7 @@ export default function MenuQRPage() {
             />
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase' }}>
-                Yanni's Yared
+                Yanni's Yard
               </Typography>
               <Typography variant="caption" sx={{ color: 'rgba(245,239,230,0.65)', letterSpacing: 2, textTransform: 'uppercase' }}>
                 Luxury hawassa dining
@@ -306,7 +306,7 @@ export default function MenuQRPage() {
                   }}
                 >
                   <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: -0.8 }}>
-                    Yanni's Yared
+                    Yanni's Yard
                   </Typography>
                   <Typography variant="caption" sx={{ color: 'rgba(245,239,230,0.6)', letterSpacing: 2, textTransform: 'uppercase' }}>
                     Lakeside dining • Hawassa
